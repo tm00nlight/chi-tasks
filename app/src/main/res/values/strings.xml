@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CHI Tasks</string>
+    <string name="text_clicked">Button was clicked %d times.</string>
+    <string name="button_text">Click Me!</string>
 </resources>
