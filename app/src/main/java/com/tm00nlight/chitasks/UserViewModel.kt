@@ -31,4 +31,5 @@ class UserViewModel : ViewModel() {
     fun saveUser(user: User) {
         userRepository.insert(user)
     }
+
 }
