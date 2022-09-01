@@ -14,15 +14,15 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.view.get
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.switchmaterial.SwitchMaterial
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,10 +46,15 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-        for (i in 0..recyclerView.childCount-1) {
-            userViewModel.users[i].isStudent = recyclerView.get(i).findViewById<SwitchMaterial>(R.id.studentSwitcher).isChecked
+        CoroutineScope(Dispatchers.IO).launch {
+            userViewModel.clearDB()
+            for (i in 0..recyclerView.childCount - 1) {
+                userViewModel.users[i].isStudent =
+                    recyclerView.get(i).findViewById<SwitchMaterial>(R.id.studentSwitcher).isChecked
+                userViewModel.saveUser(userViewModel.users[i])
+            }
+            Log.d("initial rotate", userViewModel.users.toString())
         }
-        Log.d("initial rotate", userViewModel.users.toString())
     }
 
 
