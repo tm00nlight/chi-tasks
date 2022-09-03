@@ -12,7 +12,7 @@ class UserViewModel : ViewModel() {
     private val userRepository = UserRepository.get()
 
     init{
-        users = listOf(
+        /*users = listOf(
             User("Katrin Nelson", 17, true),
             User("Molly Davis", 14),
             User("Poppy Braxton", 80),
@@ -20,7 +20,8 @@ class UserViewModel : ViewModel() {
             User("Harry Potter", 18),
             User("Winney Ray", 22),
             User("Steven Arnolds", 25)
-        )
+        )*/
+        users = emptyList()
         Log.d("ViewModel after rotate", users.toString())
     }
 
@@ -32,4 +33,12 @@ class UserViewModel : ViewModel() {
         userRepository.insert(user)
     }
 
+    fun createUser(name: String, age: Int) {
+        val newUser = User(name,age)
+        userRepository.insert(newUser)
+        users += newUser
+    }
+
+    @JvmName("getUsersFun")
+    fun getUsers(): List<User> = userRepository.getAllUsers()
 }

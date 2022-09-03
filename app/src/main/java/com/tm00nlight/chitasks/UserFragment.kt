@@ -12,7 +12,8 @@ private const val POSITION = "UserNumber"
 
 class UserFragment: Fragment() {
     private lateinit var user: User
-    private val userViewModel: UserViewModel by lazy { ViewModelProvider(requireActivity()).get(UserViewModel::class.java) }
+    private val userViewModel: UserViewModel
+        by lazy { ViewModelProvider(requireActivity()).get(UserViewModel::class.java) }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">CHI Tasks</string>
+    <string name="app_name">Users</string>
+    <string name="new_user">Add User</string>
 </resources>

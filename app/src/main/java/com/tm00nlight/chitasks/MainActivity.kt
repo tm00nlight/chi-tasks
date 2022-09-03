@@ -7,9 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.view.get
@@ -36,6 +34,10 @@ class MainActivity : AppCompatActivity() {
 
         val activity: MainActivity = this
 
+        updateUI(this)
+    }
+
+    private fun updateUI(activity: MainActivity) {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
         recyclerView.layoutManager = LinearLayoutManager(this)
         val adapter = UserAdapter(activity, userViewModel.users)
@@ -57,6 +59,39 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_user, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.new_user -> {
+                val currentFragment = supportFragmentManager
+                    .findFragmentById(R.id.fragment_container)
+                if (currentFragment == null) {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .add(R.id.fragment_container, NewUserFragment())
+                        .addToBackStack(null)
+                        .commit()
+                } else {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .remove(currentFragment)
+                        .commit()
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, NewUserFragment())
+                        .addToBackStack(null)
+                        .commit()
+                }
+                true
+            }
+        else -> return super.onOptionsItemSelected(item)
+        }
+    }
 
     private class UserHolder(view: View) : RecyclerView.ViewHolder(view) {
         val nameField = view.findViewById<TextView>(R.id.nameField)
