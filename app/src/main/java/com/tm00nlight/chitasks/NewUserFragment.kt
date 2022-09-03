@@ -11,11 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.Month
-import java.time.MonthDay
-import java.time.Year
 import java.util.*
 
 class NewUserFragment: Fragment() {
@@ -49,7 +44,7 @@ class NewUserFragment: Fragment() {
                         nameView.text.toString(),
                         ageView.text.toString().toInt()
                     )
-                    Log.i("NEW USER", userViewModel.getUsers().toString())
+                    Log.i("NEW USER", userViewModel.getUsers().value.toString())
                 }
                 Toast.makeText(context, "User added successfully", Toast.LENGTH_LONG).show()
                 val currentFragment = requireActivity().supportFragmentManager

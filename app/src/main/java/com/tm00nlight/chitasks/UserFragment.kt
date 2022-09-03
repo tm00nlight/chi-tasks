@@ -27,7 +27,7 @@ class UserFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val position = this.requireArguments().getInt(POSITION)
-        user = userViewModel.users[position]
+        user = userViewModel.users.value!![position]
 
         view.findViewById<TextView>(R.id.nameView).text = "Name: " + user.name
         view.findViewById<TextView>(R.id.ageView).text = "Age: " + user.age.toString() + " y.o."

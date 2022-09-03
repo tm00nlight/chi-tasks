@@ -1,21 +1,14 @@
 package com.tm00nlight.chitasks
 
-import android.app.Activity
-import android.content.Context
-import android.content.SharedPreferences
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.*
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.core.view.get
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.coroutines.CoroutineScope
@@ -27,21 +20,24 @@ class MainActivity : AppCompatActivity() {
     private val userViewModel: UserViewModel by lazy {
         ViewModelProvider(this).get(UserViewModel::class.java)
     }
+    private var adapter: UserAdapter? = UserAdapter(this, emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val activity: MainActivity = this
-
-        updateUI(this)
-    }
-
-    private fun updateUI(activity: MainActivity) {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter = UserAdapter(activity, userViewModel.users)
-        recyclerView.adapter = adapter
+
+        userViewModel.users.observe(this,
+            Observer { users -> users.let { updateUI(this, users) }}
+        )
+
+    }
+
+    private fun updateUI(activity: MainActivity, users: List<User>) {
+        adapter = UserAdapter(activity, users)
+        findViewById<RecyclerView>(R.id.recyclerview).adapter = adapter
     }
 
     override fun onPause() {
@@ -49,11 +45,13 @@ class MainActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
         CoroutineScope(Dispatchers.IO).launch {
-            userViewModel.clearDB()
             for (i in 0..recyclerView.childCount - 1) {
-                userViewModel.users[i].isStudent =
+                userViewModel.updateUser(User(
+                    recyclerView.get(i).findViewById<TextView>(R.id.nameField).text.toString(),
+                    recyclerView.get(i).findViewById<TextView>(R.id.ageField).text.toString().
+                        replace(" y.o.", "").toInt(),
                     recyclerView.get(i).findViewById<SwitchMaterial>(R.id.studentSwitcher).isChecked
-                userViewModel.saveUser(userViewModel.users[i])
+                ))
             }
             Log.d("initial rotate", userViewModel.users.toString())
         }
