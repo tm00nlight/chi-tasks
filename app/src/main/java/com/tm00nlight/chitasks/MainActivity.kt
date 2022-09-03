@@ -85,6 +85,7 @@ class MainActivity : AppCompatActivity() {
                         .addToBackStack(null)
                         .commit()
                 }
+                findViewById<RecyclerView>(R.id.recyclerview).visibility = View.INVISIBLE
                 true
             }
         else -> return super.onOptionsItemSelected(item)

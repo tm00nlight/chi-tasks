@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,7 +54,6 @@ class NewUserFragment: Fragment() {
                     .beginTransaction()
                     .remove(currentFragment!!)
                     .commit()
-                //updateUI()
             }
             else {
                 if(nameView.text.toString() == "") Toast.makeText(context, "Enter a correct name!", Toast.LENGTH_LONG).show()
@@ -61,6 +61,11 @@ class NewUserFragment: Fragment() {
                 return@setOnClickListener
             }
         }
+    }
+
+    override fun onDestroyView() {
+        requireActivity().findViewById<RecyclerView>(R.id.recyclerview).visibility = View.VISIBLE
+        super.onDestroyView()
     }
 
     fun getAge(year: Int, month: Int, day: Int): Int {
