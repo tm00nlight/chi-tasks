@@ -19,4 +19,10 @@ interface UserDao {
 
     @Query("select * from user order by name asc")
     fun getAllUsers(): LiveData<List<User>>
+
+    @Query("select * from user order by age asc")
+    fun getAllUsersByAge(): LiveData<List<User>>
+
+    @Query("select * from user order by isStudent desc")
+    fun getAllUsersByStudents(): LiveData<List<User>>
 }

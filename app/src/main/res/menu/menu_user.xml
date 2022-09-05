@@ -8,4 +8,10 @@
         android:title="@string/new_user"
         app:showAsAction="ifRoom|withText"/>
 
+    <item
+        android:id="@+id/sorting"
+        android:icon="@drawable/ic_sort"
+        android:title="@string/sorting"
+        app:showAsAction="ifRoom|withText"/>
+
 </menu>

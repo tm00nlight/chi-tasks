@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 class UserViewModel : ViewModel() {
     private val userRepository = UserRepository.get()
     var users: LiveData<List<User>> = getUsers()
+    var users2: LiveData<List<User>> = getUsersByAge()
+    var users3: LiveData<List<User>> = getUsersByStudents()
 
     fun clearDB() {
         userRepository.deleteAllUsers()
@@ -20,6 +22,10 @@ class UserViewModel : ViewModel() {
         userRepository.update(user)
     }
 
+    fun deleteUser(user: User) {
+        userRepository.delete(user)
+    }
+
     fun createUser(name: String, age: Int) {
         val newUser = User(name,age)
         userRepository.insert(newUser)
@@ -28,4 +34,6 @@ class UserViewModel : ViewModel() {
 
     @JvmName("getUsersFun")
     fun getUsers(): LiveData<List<User>> = userRepository.getAllUsers()
+    fun getUsersByAge(): LiveData<List<User>> = userRepository.getAllUsersByAge()
+    fun getUsersByStudents(): LiveData<List<User>> = userRepository.getAllUsersByStudents()
 }

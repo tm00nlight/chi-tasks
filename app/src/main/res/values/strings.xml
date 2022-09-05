@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Users</string>
     <string name="new_user">Add User</string>
+    <string name="sorting">Sorting</string>
+    <string-array name="sort_options">
+        <item>Sort by name</item>
+        <item>Sort by age</item>
+        <item>Sort by student status</item>
+    </string-array>
 </resources>

@@ -11,6 +11,8 @@ class UserRepository (context: Context){
     private val userDao = database.userDao()
 
     fun getAllUsers(): LiveData<List<User>> = userDao.getAllUsers()
+    fun getAllUsersByAge(): LiveData<List<User>> = userDao.getAllUsersByAge()
+    fun getAllUsersByStudents(): LiveData<List<User>> = userDao.getAllUsersByStudents()
     fun insert(user: User) = userDao.insert(user)
     fun update(user: User) = userDao.update(user)
     fun delete(user: User) = userDao.delete(user)

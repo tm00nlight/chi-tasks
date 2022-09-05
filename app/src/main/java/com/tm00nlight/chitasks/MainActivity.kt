@@ -1,11 +1,13 @@
 package com.tm00nlight.chitasks
 
 
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.get
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +34,6 @@ class MainActivity : AppCompatActivity() {
         userViewModel.users.observe(this,
             Observer { users -> users.let { updateUI(this, users) }}
         )
-
     }
 
     private fun updateUI(activity: MainActivity, users: List<User>) {
@@ -88,6 +89,23 @@ class MainActivity : AppCompatActivity() {
                 findViewById<RecyclerView>(R.id.recyclerview).visibility = View.INVISIBLE
                 true
             }
+            R.id.sorting -> {
+                val sortingDialog = AlertDialog.Builder(this)
+                sortingDialog.setItems(R.array.sort_options, DialogInterface.OnClickListener {
+                        dialogInterface, i -> run {
+                            when(i) {
+                                0 -> userViewModel.users.observe(this,
+                                    Observer { users -> users.let { updateUI(this, users) }})
+                                1 -> userViewModel.users2.observe(this,
+                                    Observer { users -> users.let { updateUI(this, users) }})
+                                2 -> userViewModel.users3.observe(this,
+                                    Observer { users -> users.let { updateUI(this, users) }})
+                            }
+                        }
+                })
+                sortingDialog.create().show()
+                true
+            }
         else -> return super.onOptionsItemSelected(item)
         }
     }
@@ -96,7 +114,6 @@ class MainActivity : AppCompatActivity() {
         val nameField = view.findViewById<TextView>(R.id.nameField)
         val ageField = view.findViewById<TextView>(R.id.ageField)
         val switcher = view.findViewById<SwitchMaterial>(R.id.studentSwitcher)
-
     }
 
     private class UserAdapter(val activity: MainActivity, var users: List<User>) : RecyclerView.Adapter<UserHolder>() {
@@ -134,6 +151,20 @@ class MainActivity : AppCompatActivity() {
                         .addToBackStack(null)
                         .commit()
                 }
+            }
+
+            holder.itemView.setOnLongClickListener {
+                val deleteDialog = AlertDialog.Builder(activity)
+                deleteDialog.setTitle("You want to delete this User?")
+                deleteDialog.setPositiveButton("Yes", DialogInterface.OnClickListener {
+                        dialogInterface, i -> CoroutineScope(Dispatchers.IO).launch{
+                            activity.userViewModel.deleteUser(users[position])
+                } })
+                deleteDialog.setNegativeButton("No", DialogInterface.OnClickListener {
+                        dialogInterface, i -> dialogInterface.cancel() })
+                deleteDialog.create()
+                deleteDialog.show()
+                true
             }
         }
 
